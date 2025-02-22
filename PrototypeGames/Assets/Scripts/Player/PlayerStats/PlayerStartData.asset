@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c44e22d5e6548a3947f11a006b4afd2, type: 3}
+  m_Name: PlayerStartData
+  m_EditorClassIdentifier: 
+  strength: 10
+  agility: 10
+  intelligence: 10
+  maxHitPoints: 100
+  stamina: 100
+  manaPool: 100
+  damage: 3
+  magicDamage: 1
+  walkSpeed: 5
+  sprintSpeed: 7
+  armour: 2
+  regenerationMana: 0.2
+  regenerationStamina: 0.1
