@@ -9,6 +9,7 @@ namespace Monsters
         public void TakeDamage(int damage)
         {
             enemyCurrentHp -= damage;
+            Debug.Log($"Полученное урона: {damage}, осталось {enemyCurrentHp} хп");
         }
     }
 }

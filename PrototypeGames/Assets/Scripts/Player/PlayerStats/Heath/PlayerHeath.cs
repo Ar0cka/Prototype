@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using Player.PlayerStats.Heath;
 using Player.PlayerStats.Interface;
 using ScriptableObjects.Player;
 using UnityEngine;
 
 namespace Player
 {
-    public class PlayerHeath : MonoBehaviour, IDamageable, IUpHeathPlayer
+    public class PlayerHeath : MonoBehaviour, IDamageable, IUpHeathPlayer, IHealPlayer
     {
         private PlayerStartData baseStats;
         private PlayerMainStats playerStats;
@@ -34,6 +35,19 @@ namespace Player
             _maxHitPoints = baseStats.MaxHitPoints;
             _armour = baseStats.Armour;
             _currentHitPoints = _maxHitPoints;
+            
+            TakeDamage(30);
+        }
+
+        public void HealPlayer(int healCount)
+        {
+            if (_currentHitPoints < _maxHitPoints)
+            {
+                _currentHitPoints += healCount;
+            }
+
+            _currentHitPoints = Mathf.Clamp(_currentHitPoints, 0, _maxHitPoints);
+            Debug.Log("Current hp = " + _currentHitPoints);
         }
         
         public void TakeDamage(int damage)

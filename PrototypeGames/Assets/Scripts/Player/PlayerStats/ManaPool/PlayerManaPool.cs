@@ -1,10 +1,12 @@
-﻿using Player.PlayerStats.Interface;
+﻿using System;
+using Player.PlayerStats.Interface;
+using Player.PlayerStats.ManaPool;
 using ScriptableObjects.Player;
 using UnityEngine;
 
 namespace Player
 {
-    public class PlayerManaPool : MonoBehaviour, IUpManaPool
+    public class PlayerManaPool : MonoBehaviour, IUpManaPool, ISubtractionMana
     {
         private PlayerStartData baseStats;
         private PlayerMainStats stats;
@@ -14,6 +16,21 @@ namespace Player
         
         [Header("RunTime stats")]
         private int _currentManaPool;
+
+        private float currentRegnerationCount;
+
+        private void FixedUpdate()
+        {
+            if (_currentManaPool < _manaPool)
+            {
+                currentRegnerationCount += _regenerationMana;
+
+                if (Mathf.Approximately(currentRegnerationCount, Mathf.Round(currentRegnerationCount)))
+                {
+                    RegenerationMana((int)currentRegnerationCount);
+                }
+            }
+        }
 
         public void InitializeManaPool(PlayerMainStats mainStats, PlayerStartData playerStats)
         {
@@ -40,6 +57,22 @@ namespace Player
             _currentManaPool = _manaPool;
             
             //Добавить улучшение восстановление маны
+        }
+
+        private void RegenerationMana(int count)
+        {
+            _currentManaPool += count;
+        }
+
+        public void SubtractionMana(int spellCost)
+        {
+            if (_currentManaPool < spellCost)
+            {
+                Debug.Log("Dont have mana");
+                return;
+            }
+            
+            _currentManaPool -= spellCost;
         }
         
         public int CurrentManaPool => _currentManaPool;

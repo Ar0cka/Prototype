@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -23,7 +22,7 @@ namespace Player
         private int _countAttack;
         private float lastClicked;
 
-        private void Start()
+        private void Start()  
         {
             if (animator == null) animator = GetComponent<Animator>();
                 

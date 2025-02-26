@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Monsters;
+using Player;
 using UnityEngine;
 
 public class CheckHit : MonoBehaviour
@@ -13,7 +14,7 @@ public class CheckHit : MonoBehaviour
         if (!hit && other.CompareTag("Enemy"))
         {
             var enemy = other.GetComponent<EnemyDataTest>();
-            enemy.TakeDamage(5);
+            enemy.TakeDamage(GlobalPlayerStats.Instance.AttackDamage);
             hit = true;
         }
     }

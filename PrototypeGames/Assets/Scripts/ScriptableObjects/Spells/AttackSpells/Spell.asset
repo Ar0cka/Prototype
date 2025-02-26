@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf75f982e3e44128d988c0a13b74f33, type: 3}
+  m_Name: Spell
+  m_EditorClassIdentifier: 
+  nameSpell: Fire
+  description: "\u0432\u0437\u0440\u044B\u0432"
+  spellCost: 25
+  cooldown: 1
+  spellType: 0
+  spellPrefab: {fileID: 4798121876410523444, guid: 30a5fa741c168044197a0f944f3c4aa7, type: 3}
+  damage: 5
+  spellSpeed: 3
+  timeAlive: 5
+  typeDamage: 0
