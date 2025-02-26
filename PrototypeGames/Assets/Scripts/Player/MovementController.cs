@@ -63,9 +63,9 @@ public class MovementController : MonoBehaviour
         
         animator.SetBool("Walk", ActivatingWalkAnimation(horizontalMove, verticalMove));
         
-        Vector2 moveDirection = new Vector2(horizontalMove, verticalMove) * Speed();
-        
-        rb2D.velocity = moveDirection;
+        Vector2 moveDirection = new Vector2(horizontalMove, verticalMove);
+
+        rb2D.velocity = moveDirection * Speed();
     }
 
     private float Speed()
