@@ -38,8 +38,8 @@ namespace Player.CastSpeelSystem
             if (other.CompareTag("Enemy"))
             {
                 Debug.Log("FindPlayer");
-                EnemyDataTest enemyDataTest = other.GetComponent<EnemyDataTest>();
-                enemyDataTest.TakeDamage(_damage);
+                EnemyData enemyData = other.GetComponent<EnemyData>();
+                enemyData.TakeDamage(_damage);
                 Destroy(gameObject);
             }
         }

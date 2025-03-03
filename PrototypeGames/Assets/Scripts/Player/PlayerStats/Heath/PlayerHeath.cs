@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Player
 {
-    public class PlayerHeath : MonoBehaviour, IDamageable, IUpHeathPlayer, IHealPlayer
+    public class PlayerHeath : MonoBehaviour, IDamageable, IUpHeathPlayer, IHealPlayer, IPlayerTakeDamage
     {
         private PlayerStartData baseStats;
         private PlayerMainStats playerStats;
@@ -56,6 +56,8 @@ namespace Player
 
             float finalDamage = damage * (1 - DamageReducer());
             _currentHitPoints -= (int)finalDamage;
+            
+            Debug.Log("Current hp after take damage " + _currentHitPoints);
 
             if (_currentHitPoints <= 0) PlayerDie();
         }

@@ -13,7 +13,7 @@ public class CheckHit : MonoBehaviour
     {
         if (!hit && other.CompareTag("Enemy"))
         {
-            var enemy = other.GetComponent<EnemyDataTest>();
+            IDamageable enemy = other.GetComponent<EnemyData>();
             enemy.TakeDamage(GlobalPlayerStats.Instance.AttackDamage);
             hit = true;
         }

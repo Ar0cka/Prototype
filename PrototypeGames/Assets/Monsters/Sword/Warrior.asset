@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44928cf9c58446b3b5559fa4577116d5, type: 3}
+  m_Name: Warrior
+  m_EditorClassIdentifier: 
+  maxHitPoints: 100
+  speed: 5
+  monsterRegeneration: 1
+  monsterType: 1
+  weaponDamage: 7
+  monsterWeaponTypeDamage: 0
