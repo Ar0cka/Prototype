@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using DefaultNamespace;
 using ScriptableObjects.Monsters;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -10,6 +11,8 @@ namespace Monsters
     public class MonsterAttack : MonoBehaviour
     {
         [SerializeField] private MonsterAbstractData monsterData;
+        [SerializeField] private SpriteRenderer spriteRenderer;
+        [SerializeField] private CheckStopRadius stopRadius;
         
         [Header("Delays")]
         [SerializeField] private float delayForAttack = 1f;
@@ -19,10 +22,6 @@ namespace Monsters
         [Header("Count attack")]
         [SerializeField] private int countAnimationAttack = 1;
 
-        [Header("Collider settings")]
-        [SerializeField] private CircleCollider2D attackTriggerCollider;
-        [SerializeField] private float radiusCollider = 2f;
-        
         private float _cooldownAttack;
         private float _delayForAttack;
         private bool canAttack;
@@ -30,35 +29,35 @@ namespace Monsters
         private void Awake()
         {
             if (animator == null) animator = GetComponentInParent<Animator>();
-            if (attackTriggerCollider == null) attackTriggerCollider = GetComponent<CircleCollider2D>();
+            if (spriteRenderer == null) spriteRenderer = GetComponentInParent<SpriteRenderer>();
+            if (stopRadius == null) stopRadius = GetComponentInChildren<CheckStopRadius>();
 
-            if (animator == null || attackTriggerCollider == null || monsterData == null) 
+            if (animator == null || stopRadius == null || monsterData == null || spriteRenderer == null) 
             {
-                Debug.LogError("Not founded components");
+                Debug.LogError("Not found components");
                 enabled = false;
                 return;
             }
 
-            attackTriggerCollider.radius = radiusCollider;
-            attackTriggerCollider.isTrigger = true;
-
             _cooldownAttack = monsterData.CooldownAttack;
+            _delayForAttack = delayForAttack;
         }
 
         private void Update()
         {
+            // Проверяем, остановился ли монстр перед игроком
+            canAttack = stopRadius.IsStop;
+
             if (canAttack)
             {
                 _delayForAttack -= Time.deltaTime;
                 
                 if (_delayForAttack < 0)
                 {
-                    if (_cooldownAttack < 0 )
+                    if (_cooldownAttack < 0)
                     {
-                        Debug.Log("Player stay in attack zone");
-                       
+                        Debug.Log("Attacking player!");
                         TakeMethod();
-                        
                     }
                     else
                     {
@@ -66,13 +65,14 @@ namespace Monsters
                     }
                 }
             }
-        }
-
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            if (other.CompareTag("Player"))
+            else
             {
-                canAttack = true;
+                // Сбрасываем задержку и переключаем поведение, если монстр вышел из боя
+                if (MonsterGlobalValues.Instance.IsMonsterInFight)
+                {
+                    _delayForAttack = delayForAttack;
+                    StartCoroutine(DelayForSwitchBehavior());
+                }
             }
         }
 
@@ -88,7 +88,7 @@ namespace Monsters
             }
         }
         
-        private void AttackPlayer() //Активация анимации атаки 
+        private void AttackPlayer()
         {
             animator.SetTrigger("Attack");
             MonsterGlobalValues.Instance.SwitchMonsterBehavior(true);
@@ -97,17 +97,7 @@ namespace Monsters
 
         private void ComboAttack()
         {
-            
-        }
-
-        private void OnTriggerExit2D(Collider2D other)
-        {
-            if (other.CompareTag("Player") && MonsterGlobalValues.Instance.IsMonsterInFight)
-            {
-                canAttack = false;
-                _delayForAttack = delayForAttack;
-                StartCoroutine(DelayForSwitchBehavior());
-            }
+            // Логика комбо-атаки, если нужна
         }
 
         private IEnumerator DelayForSwitchBehavior()

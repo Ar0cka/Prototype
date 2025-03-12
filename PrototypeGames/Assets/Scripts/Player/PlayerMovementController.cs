@@ -6,7 +6,7 @@ using Player.PlayerStats.Stamina;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class MovementController : MonoBehaviour
+public class PlayerMovementController : MonoBehaviour
 {
     [SerializeField] private float walkSpeed = 3f;
     [SerializeField] private float runSpeed = 5f;
@@ -18,6 +18,8 @@ public class MovementController : MonoBehaviour
     [SerializeField] private int sprintCost = 1;
     [SerializeField] private int minStamina = 10;
 
+    public Vector2 MoveDirection { get; private set; }
+    
     private ISubtractionStamina _subtractionStamina;
     private bool _isSprint;
 
@@ -63,9 +65,9 @@ public class MovementController : MonoBehaviour
         
         animator.SetBool("Walk", ActivatingWalkAnimation(horizontalMove, verticalMove));
         
-        Vector2 moveDirection = new Vector2(horizontalMove, verticalMove);
+        MoveDirection = new Vector2(horizontalMove, verticalMove);
 
-        rb2D.velocity = moveDirection * Speed();
+        rb2D.velocity = MoveDirection * Speed();
     }
 
     private float Speed()

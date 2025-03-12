@@ -15,6 +15,7 @@ namespace Monsters
         [SerializeField] private CheckStopRadius stopRadius;
 
         [SerializeField] private float speed = 3f;
+        [SerializeField] private float moveInX = 2;
         
         [Header("Transform")] 
         [SerializeField] private float correctCoefByY= 0.4f; 
@@ -23,26 +24,27 @@ namespace Monsters
         [SerializeField] private CircleCollider2D followRadius;
         [SerializeField] private float radiusCollider;
 
-        [Header("RaycastSettings")] 
-        [SerializeField] private Transform raycastPosition;
-        [SerializeField] private float distanceRaycast;
-        [SerializeField] private float stopDistance;
+        [Header("CheckPlayerPosition")] 
+        [SerializeField] private CheckPlayerPosition playerPosition;
         
         private Transform _playerTransform;
-        
+
+        private PlayerMovementController _playerMovementController;
 
         private void Awake()
         {
             if (rb2D == null) rb2D = GetComponentInParent<Rigidbody2D>();
             if (animator == null) animator = GetComponentInParent<Animator>();
             if (spriteRenderer == null) spriteRenderer = GetComponentInParent<SpriteRenderer>();
+            if (playerPosition == null) playerPosition = GetComponentInChildren<CheckPlayerPosition>();
 
-            if (rb2D == null || animator == null || spriteRenderer == null || stopRadius == null)
+            if (rb2D == null || animator == null || spriteRenderer == null || stopRadius == null || playerPosition == null)
             {
                 Debug.LogError((rb2D == null ? "Rigidbody2D" : "") +
                                (animator == null ? "Animator" : "") +
                                (spriteRenderer == null ? "Sprite renderer" : "") +
-                               (stopRadius == null ? "Stop radius" : ""));
+                               (stopRadius == null ? "Stop radius" : "") + 
+                               (playerPosition == null ? "player position" : ""));
                 enabled = false;
                 Destroy(gameObject);
             }
@@ -53,14 +55,20 @@ namespace Monsters
 
         private void Update()
         {
-            if (CanUseDefaultMove() && !CheckPlayerInYVector())
+            if (stopRadius.IsStop)
             {
-                //Нужно брать постоянное местоположение игрока
-                MoveMonster();
+                spriteRenderer.flipX = _playerTransform.position.x < transform.position.x;
             }
-            else if (CheckPlayerInYVector())
+            
+            if (CanUseDefaultMove() && !playerPosition.NeedWalkAroundPlayer)
             {
-                
+                Vector2 moveDirection = (_playerTransform.position - transform.position).normalized; //Добавить отклонения во время ходьбы чтобы не было вида, что он идет по прямой
+                spriteRenderer.flipX = moveDirection.x < 0;
+                MoveMonster(moveDirection);
+            }
+            else if (playerPosition.NeedWalkAroundPlayer)
+            {
+                MoveMonster(SideStepPlayer());
             }
             
             SetRunAnimation();
@@ -68,11 +76,9 @@ namespace Monsters
 
         #region MoveEnemy
 
-        private void MoveMonster()
+        private void MoveMonster(Vector2 moveDirection)
         {
-            Vector2 moveDirection = (_playerTransform.position - transform.position).normalized; //Добавить отклонения во время ходьбы чтобы не было вида, что он идет по прямой
             CheckYPosition(ref moveDirection);
-                
             rb2D.MovePosition(rb2D.position + moveDirection * speed * Time.deltaTime);
         }
         
@@ -89,16 +95,16 @@ namespace Monsters
             }
         }
 
-        private void SideStepPlayer()
+        private Vector2 SideStepPlayer()
         {
-            if (_playerTransform.position.magnitude > 0.01f)
+            if (_playerTransform == null) return Vector2.zero;
+
+            if (_playerTransform.position.x > transform.position.x)
             {
-                //Изменения x противоположно движению игрока
+                return new Vector2(-moveInX, 0).normalized;
             }
-            else
-            {
-                //Просто монстр идет вправа 
-            }
+
+            return new Vector2(moveInX, 0).normalized;
         }
 
         #endregion
@@ -123,6 +129,7 @@ namespace Monsters
             if (other.CompareTag("Player"))
             {
                 MonsterGlobalValues.Instance.SwitchSeePlayer(true);
+                _playerMovementController = other.GetComponent<PlayerMovementController>();
                 _playerTransform = other.transform;
             }
         }
@@ -140,34 +147,11 @@ namespace Monsters
 
         #region RaycastCheckers
 
-        private bool CheckPlayerInYVector()
-        {
-            RaycastHit2D raycastHit2DDown = Physics2D.Raycast(raycastPosition.position, Vector2.down, distanceRaycast,
-                LayerMask.GetMask("Player"));
-            
-            RaycastHit2D raycastHit2DUp = Physics2D.Raycast(raycastPosition.position, Vector2.up, distanceRaycast,
-                LayerMask.GetMask("Player"));
-
-            if (raycastHit2DDown.collider.CompareTag("Player") && raycastHit2DDown.distance <= stopDistance)
-            {
-                Debug.Log("Игрок находится снизу");
-                return true;
-            }
-
-            if (raycastHit2DUp.collider.CompareTag("Player") && raycastHit2DUp.distance <= stopDistance)
-            {
-                Debug.Log("Игрок находится сверху");
-                return true;
-            }
-
-            return false;
-        }
-
         private bool CanUseDefaultMove()
         {
             return MonsterGlobalValues.Instance.IsSeePlayer && !stopRadius.IsStop;
         }
-
+        
         #endregion
     }
 }
