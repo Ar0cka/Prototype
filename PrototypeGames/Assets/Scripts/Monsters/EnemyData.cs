@@ -8,6 +8,7 @@ namespace Monsters
     public class EnemyData : MonoBehaviour, IDamageable
     {
         [SerializeField] private MonsterAbstractData monsterAbstractData;
+        [SerializeField] private MonsterController monsterController;
 
         private int _enemyCurrentHitPoint;
         
@@ -92,5 +93,7 @@ namespace Monsters
         {
             IsSeePlayer = value;
         }
+        
+        
     }
 }

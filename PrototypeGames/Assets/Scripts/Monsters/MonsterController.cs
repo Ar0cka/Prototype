@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DefaultNamespace;
 using ScriptableObjects.Monsters;
 using UnityEngine;
@@ -78,7 +79,7 @@ namespace Monsters
 
         private void MoveMonster(Vector2 moveDirection)
         {
-            CheckYPosition(ref moveDirection);
+            CheckYPosition(ref moveDirection);    
             rb2D.MovePosition(rb2D.position + moveDirection * speed * Time.deltaTime);
         }
         
@@ -108,7 +109,6 @@ namespace Monsters
         }
 
         #endregion
-       
         
         private void SetRunAnimation()
         {
@@ -130,6 +130,14 @@ namespace Monsters
             {
                 MonsterGlobalValues.Instance.SwitchSeePlayer(true);
                 _playerMovementController = other.GetComponent<PlayerMovementController>();
+                _playerTransform = other.transform;
+            }
+        }
+
+        private void OnTriggerStay2D(Collider2D other)
+        {
+            if (other.CompareTag("Player"))
+            {
                 _playerTransform = other.transform;
             }
         }
