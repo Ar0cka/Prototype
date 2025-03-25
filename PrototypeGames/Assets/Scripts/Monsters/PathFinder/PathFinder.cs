@@ -6,19 +6,21 @@ namespace Monsters.PathFinder
     public class PathFinder
     {
         private GenerationNodes nodeGenerator;
-
+        private int countInter = 0;
+        
         public PathFinder(GenerationNodes generator)
         {
             nodeGenerator = generator;
         }
 
-        public List<Node> FindPath(Vector2Int startPos, Vector2Int endPos)
+        public List<Node> FindPath(Vector2Int startPos, Vector2Int endPos) //Проблема с количеством итерация, нагружающие память
         {
             Node startNode = nodeGenerator.GetNode(startPos.x,startPos.y);
             Node endNode = nodeGenerator.GetNode(endPos.x, endPos.y);
 
             if (startNode == null || endNode == null || !startNode.IsWalkable || !endNode.IsWalkable)
             {
+                Debug.LogError("Not found cousrse");
                 return null; // Невозможно найти путь
             }
 
@@ -51,10 +53,14 @@ namespace Monsters.PathFinder
 
                         if (!openList.Contains(neighbor))
                             openList.Add(neighbor);
+
+                        countInter++;
+                        Debug.Log($"Итерация = {countInter}");
                     }
                 }
             }
 
+            Debug.LogError("course not founded");
             return null; // Путь не найден
         }
 
