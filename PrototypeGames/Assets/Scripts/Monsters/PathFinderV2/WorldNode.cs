@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Monsters.PathFinderV2
 {
-    public class WorldNode
+    public class WorldNode : IHeapItem<WorldNode>
     {
         public Vector3 WorldPosition { get; }
         public bool IsWalkable { get; }
@@ -17,6 +17,8 @@ namespace Monsters.PathFinderV2
 
         public WorldNode parent;
 
+        private int heapIdnex;
+
         public WorldNode(Vector3 worldPosition, bool isWalkable, int _gridX, int _gridY)
         {
             WorldPosition = worldPosition;
@@ -25,6 +27,29 @@ namespace Monsters.PathFinderV2
             gridY = _gridY;
 
             parent = null;
+        }
+
+        public int HeapIndex
+        {
+            get
+            {
+                return heapIdnex;
+            }
+            set
+            {
+                heapIdnex = value;
+            }
+        }
+
+        public int CompareTo(WorldNode nodeToCompare)
+        {
+            int compare = FCost.CompareTo(nodeToCompare.FCost);
+            if (compare == 0)
+            {
+                compare = HCost.CompareTo(nodeToCompare.HCost);
+            }
+
+            return -compare;
         }
     }
 }
