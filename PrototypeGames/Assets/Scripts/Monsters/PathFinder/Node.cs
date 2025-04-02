@@ -1,27 +1,29 @@
-﻿using Unity.VisualScripting;
+﻿using UnityEngine;
 
 namespace Monsters.PathFinder
 {
     public class Node
     {
-        public int X { get; }
-        public int Y { get; }
-        public bool IsWalkable { get;}
+        public Vector2 worldPosition;
+        
+        public int gridX;
+        public int gridY;
 
+        public bool isWalkable;
+        
         public int GCost;
         public int HCost;
         public int FCost => GCost + HCost;
 
-        public Node Parent;
-        
-        public Node(int x, int y, bool isWalkable = true)
+        public Node parent;
+
+        public Node(int x, int y, bool IsWalkable, Vector2 _worldPosition)
         {
-            X = x;
-            Y = y;
-            IsWalkable = isWalkable;
-            GCost = 0;
-            HCost = 0;
-            Parent = null;
+            gridX = x;
+            gridY = y;
+            isWalkable = IsWalkable;
+            parent = null;
+            worldPosition = _worldPosition;
         }
     }
 }

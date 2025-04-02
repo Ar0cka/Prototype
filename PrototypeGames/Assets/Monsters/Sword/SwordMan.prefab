@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 721781735565174971}
   - component: {fileID: 4794422597686716216}
-  - component: {fileID: 8525794914966877388}
   - component: {fileID: 4450446347528243448}
   - component: {fileID: 6871150405738310928}
   - component: {fileID: 4106550674615805243}
@@ -91,51 +90,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &8525794914966877388
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3755157115284885373}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.031711817, y: -0.058137745}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.21875, y: 1.421875}
-    newSize: {x: 0.96875, y: 1.171875}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.6304946, y: 0.86533064}
-  m_EdgeRadius: 0
 --- !u!50 &4450446347528243448
 Rigidbody2D:
   serializedVersion: 4
@@ -176,6 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterAbstractData: {fileID: 11400000, guid: c3f39edf29d609b4b980d5780201cfa3, type: 2}
+  monsterController: {fileID: 0}
 --- !u!95 &4106550674615805243
 Animator:
   serializedVersion: 5
@@ -242,12 +197,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc1484744b66488eaef0b6e7d51c6312, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  monsterData: {fileID: 0}
+  spriteRenderer: {fileID: 0}
+  stopRadius: {fileID: 0}
   delayForAttack: 1
   delayForSwitchBehavior: 3
   animator: {fileID: 4106550674615805243}
   countAnimationAttack: 1
-  attackTriggerCollider: {fileID: 6363404582560152515}
-  radiusCollider: 2
 --- !u!58 &6363404582560152515
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -330,10 +286,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb2D: {fileID: 4450446347528243448}
   animator: {fileID: 4106550674615805243}
+  spriteRenderer: {fileID: 0}
+  stopRadius: {fileID: 0}
   speed: 8
+  moveInX: 2
   correctCoefByY: 0.5
   followRadius: {fileID: 8969960448721317920}
   radiusCollider: 5
+  playerPosition: {fileID: 0}
 --- !u!58 &8969960448721317920
 CircleCollider2D:
   m_ObjectHideFlags: 0
